@@ -6,10 +6,13 @@
     <p1>Welcome....</p1></br>
     {% if request.user.is_authenticated %}
         {{ request.user }}
+        <br>
         <a href="{% url 'logout' %}">logout</a>
+        <br>
         <a href="{% url 'profile' %}">profile</a>
     {% else %}
         <a href="{% url 'login' %}">login</a>
+        <br>
         <a href="{% url 'register' %}">SignUp</a>
     {% endif %}
 {% endblock %}

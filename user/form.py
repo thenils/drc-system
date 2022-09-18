@@ -1,10 +1,8 @@
 import random
 
 from django import forms
-from django.utils.translation import gettext_lazy as _
-
 from user.models import Email, User
-from utils.modules import send_otp, clean_phone
+from utils.modules import clean_phone, welcome_mail
 
 
 class UserCreateForm(forms.Form):
@@ -58,5 +56,8 @@ class UserCreateForm(forms.Form):
         user.save()
         if 'email' in data:
             Email.objects.create(user=user, email=data['email'], isPrimary=True)
+            welcome_mail(data['email'], user)
 
         return user
+
+
