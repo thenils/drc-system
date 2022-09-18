@@ -41,22 +41,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-class Email(models.Model):
-    email = models.EmailField(gl('email address'), unique=True)
-    isPrimary = models.BooleanField(default=False)
-    isDeleted = models.BooleanField(default=False)
-    createdAt = models.DateTimeField(auto_now=True)
-    updatedAt = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = 'User Email Addresses'
-
-    def __str__(self):
-        return f'{self.email}, {self.isPrimary}'
-
-
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.ForeignKey(Email, on_delete=models.DO_NOTHING, null=True, related_name='user_email')
     username = models.CharField(max_length=35, unique=True)
     phone = models.CharField(max_length=16, unique=True)
     first_name = models.CharField(max_length=45)
@@ -74,6 +59,21 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.username
+
+
+class Email(models.Model):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='emails')
+    email = models.EmailField(gl('email address'), unique=True)
+    isPrimary = models.BooleanField(default=False)
+    isDeleted = models.BooleanField(default=False)
+    createdAt = models.DateTimeField(auto_now=True)
+    updatedAt = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'User Email Addresses'
+
+    def __str__(self):
+        return f'{self.email}, {self.isPrimary}'
 
 
 class SessionOTP(models.Model):

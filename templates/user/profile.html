@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+    First Name: {{ user.first_name }} <br>
+    Last Name: {{ user.last_name }} <br>
+    username: {{ user.username }} <br>
+    phone: {{ user.phone }} <br>
+    emails : <br>
+    {% for email in emails %}
+        <hr>
+        --{{ email.email }}<br>
+        {% if email.isPrimary %}<p style="color: green">Primary</p>{% else %}
+            <a href="{% url 'set_primary' user.id email.id %}">set as primary</a>
+        {% endif %}
+        <hr>
+    {% endfor %}
+    new email: <br>
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="text" name="email" required>
+        <input type="submit" value="Submit">
+
+    </form>
+
+{% endblock %}

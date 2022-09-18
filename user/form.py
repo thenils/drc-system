@@ -50,14 +50,13 @@ class UserCreateForm(forms.Form):
         return data
 
     def create(self, data):
-        email = None
-        if 'email' in data:
-            email = Email.objects.create(email=data['email'], isPrimary=True)
 
-        user = User.objects.create(email=email, phone=data['phone'], username=data['username'],
+        user = User.objects.create(phone=data['phone'], username=data['username'],
                                    first_name=data['first_name'],
-                                   last_name=['last_name'])
+                                   last_name=data['last_name'])
         user.set_password(data['password'])
         user.save()
+        if 'email' in data:
+            Email.objects.create(user=user, email=data['email'], isPrimary=True)
 
         return user
